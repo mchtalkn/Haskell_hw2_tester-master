@@ -6,14 +6,14 @@ from sys import stdin
 
 REPL_PS = str('>')
 LOOPS = 100
-input_file= open("test_input.txt","r")
+test_input= open("test_input.txt","r")
 test_out=open("test_output.txt","r")
 output_file=open("output_file.txt","w+")
-a_txt=open("a.txt","w+")
+custom_out_txt=open("custom_output.txt","w+")
 repl = pexpect.spawnu('ghci tester.hs')
-def proces_input(repl,input_file,output_file,test_out):
+def proces_input(repl,test_input,output_file,test_out):
     repl.expect(REPL_PS)
-    inp_lines = input_file.readlines()
+    inp_lines = test_input.readlines()
     out_lines =[]
     for inp in inp_lines:
         if(inp=="end" or inp=="end\n"):
@@ -32,11 +32,11 @@ def proces_input(repl,input_file,output_file,test_out):
             repl.expect(">")
             repl.sendline(inp)
             _, wrong_out = repl.readline(), repl.readline()
-            print("input:"+inp[:]+"expected:"+out+"given:"+wrong_out)
-            output_file.write("input:"+inp[:]+"expected:"+out+"given:"+wrong_out)
+            print("input:"+inp[:]+"expected:"+out+"given:"+wrong_out[7:])
+            output_file.write("input:"+inp[:]+"expected:"+out+"given:"+wrong_out[7:])
         repl.expect(">")
         repl.expect(">")
-        inp=input_file.readline()
+        inp=test_input.readline()
     repl.sendline(":q")
 
 
@@ -59,8 +59,8 @@ def generate_output(repl,input_file,output_file):
         repl.expect(">")
         inp=input_file.readline()
     output_file.write("end\n")
-proces_input(repl,input_file,output_file,test_out)
-input_file.close()
-input_file= open("test_input.txt","r")
+proces_input(repl,test_input,output_file,test_out)
+test_input.close()
+input_file= open("custom_input.txt","r")
 repl = pexpect.spawnu('ghci HW2.hs')
-generate_output(repl,input_file,a_txt)
+generate_output(repl,input_file,custom_out_txt)
