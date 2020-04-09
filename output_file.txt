@@ -1,0 +1,45 @@
+input:foldAndPropagateConstants [("x", parse "1+2+3")]
+expected:[("x",Leaf (Constant 6))]
+given:[?1l>[]
+input:foldAndPropagateConstants [("x", parse "1+2+3"), ("y", parse "5*x + 7")]
+expected:[("x",Leaf (Constant 6)),("y",Leaf (Constant 37))]
+given:[?1l>[]
+input:foldAndPropagateConstants [("x", parse "1+2+3"), ("y", parse "5*x + 7"), ("z", parse "y+var")]
+expected:[("x",Leaf (Constant 6)),("y",Leaf (Constant 37)),("z",BinaryOperation Plus (Leaf(Constant 37)) (Leaf (Variable "var")))]
+given:[?1l>[]
+input:foldAndPropagateConstants [("a", parse "x+3*5"), ("b", parse "(7+5)*a")]
+expected:[("a",BinaryOperation Plus (Leaf (Variable "x")) (Leaf (Constant 15))),("b",BinaryOperation Times (Leaf (Constant 12)) (Leaf (Variable "a")))]
+given:[?1l>[]
+input:foldAndPropagateConstants [("a", parse "1+2+x")]
+expected:[("a",BinaryOperation Plus (Leaf (Constant 3)) (Leaf (Variable "x")))]
+given:[?1l>[]
+input:foldAndPropagateConstants [("a", parse "1+x+2")]
+expected:[("a",BinaryOperation Plus (BinaryOperation Plus (Leaf (Constant 1)) (Leaf (Variable "x"))) (Leaf (Constant 2)))]
+given:[?1l>[]
+input:foldAndPropagateConstants [("a", parse "x+1+2")]
+expected:[("a",BinaryOperation Plus (BinaryOperation Plus (Leaf (Variable "x")) (Leaf (Constant 1))) (Leaf (Constant 2)))]
+given:[?1l>[]
+input:reducePoly $ parse "2+3"
+expected:Leaf (Constant 5)
+given:[?1l>Leaf (Variable "Not Implemented")
+input:reducePoly $ parse "2+x+x+x+-x"
+expected:BinaryOperation Plus (Leaf (Constant 2)) (BinaryOperation Times (Leaf (Constant 2)) (Leaf (Variable "x")))
+given:[?1l>Leaf (Variable "Not Implemented")
+input:reducePoly $ parse "1+a*(a+1)"
+expected:BinaryOperation Plus (BinaryOperation Plus (Leaf (Constant 1)) (Leaf (Variable "a"))) (BinaryOperation Times (Leaf (Variable "a")) (Leaf (Variable "a")))
+given:[?1l>Leaf (Variable "Not Implemented")
+input:reducePoly $ parse "(2*x+2)*(2*x+2)"
+expected:BinaryOperation Plus (BinaryOperation Plus (Leaf (Constant 4)) (BinaryOperation Times (Leaf (Constant 8)) (Leaf (Variable "x")))) (BinaryOperation Times (BinaryOperation Times (Leaf (Constant 4)) (Leaf (Variable "x"))) (Leaf (Variable "x")))
+given:[?1l>Leaf (Variable "Not Implemented")
+input:assignCommonSubexprs $ parse "(x+1)+(x+1)"
+expected:([("$0",BinaryOperation Plus (Leaf (Variable "x")) (Leaf (Constant 1)))],BinaryOperation Plus (Leaf (Variable "$0")) (Leaf (Variable "$0")))
+given:[?1l>([],Leaf (Variable "Not Implemented"))
+input:assignCommonSubexprs $ parse "(-x+1)+(-x+1)"
+expected:([("$0",UnaryOperation Minus (Leaf (Variable "x"))),("$1",BinaryOperation Plus (Leaf (Variable "$0")) (Leaf (Constant 1)))],BinaryOperation Plus (Leaf (Variable "$1")) (Leaf (Variable "$1")))
+given:[?1l>([],Leaf (Variable "Not Implemented"))
+input:assignCommonSubexprs $ parse "(x+1+2)+(x+1+2)"
+expected:([("$0",BinaryOperation Plus (Leaf (Variable "x")) (Leaf (Constant 1))),("$1",BinaryOperation Plus (Leaf (Variable "$0")) (Leaf (Constant 2)))],BinaryOperation Plus(Leaf (Variable "$1")) (Leaf (Variable "$1")))
+given:[?1l>([],Leaf (Variable "Not Implemented"))
+input:assignCommonSubexprs $ parse "(x+1+2)+(x+1+2)+(x+1)"
+expected:([("$0",BinaryOperation Plus (Leaf (Variable "x")) (Leaf (Constant 1))),("$1",BinaryOperation Plus (Leaf (Variable "$0")) (Leaf (Constant 2)))],BinaryOperation Plus(BinaryOperation Plus (Leaf (Variable "$1")) (Leaf (Variable "$1"))) (Leaf (Variable "$0")))
+given:[?1l>([],Leaf (Variable "Not Implemented"))

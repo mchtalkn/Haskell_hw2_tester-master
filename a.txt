@@ -1,0 +1,18 @@
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+Leaf (Variable "Not Implemented")
+Leaf (Variable "Not Implemented")
+Leaf (Variable "Not Implemented")
+Leaf (Variable "Not Implemented")
+([],Leaf (Variable "Not Implemented"))
+([],Leaf (Variable "Not Implemented"))
+([],Leaf (Variable "Not Implemented"))
+([],Leaf (Variable "Not Implemented"))
+([],Leaf (Variable "Not Implemented"))
+
+end
