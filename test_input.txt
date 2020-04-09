@@ -1,0 +1,17 @@
+foldAndPropagateConstants [("x", parse "1+2+3")]
+foldAndPropagateConstants [("x", parse "1+2+3"), ("y", parse "5*x + 7")]
+foldAndPropagateConstants [("x", parse "1+2+3"), ("y", parse "5*x + 7"), ("z", parse "y+var")]
+foldAndPropagateConstants [("a", parse "x+3*5"), ("b", parse "(7+5)*a")]
+foldAndPropagateConstants [("a", parse "1+2+x")]
+foldAndPropagateConstants [("a", parse "1+x+2")]
+foldAndPropagateConstants [("a", parse "x+1+2")]
+reducePoly $ parse "2+3"
+reducePoly $ parse "2+x+x+x+-x"
+reducePoly $ parse "1+a*(a+1)"
+reducePoly $ parse "(2*x+2)*(2*x+2)"
+assignCommonSubexprs $ parse "1+2"
+assignCommonSubexprs $ parse "(x+1)+(x+1)"
+assignCommonSubexprs $ parse "(-x+1)+(-x+1)"
+assignCommonSubexprs $ parse "(x+1+2)+(x+1+2)"
+assignCommonSubexprs $ parse "(x+1+2)+(x+1+2)+(x+1)"
+end
